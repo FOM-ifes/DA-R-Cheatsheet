@@ -1,0 +1,6 @@
+% BUG FIX ...
+\makeatletter
+\let\MT@pickupfont\pickup@font
+\def\MT@MT@pickupfont {\let\pickup@font\MT@pickupfont}%
+\def\MT@ltx@pickupfont{\let\pickup@font\MT@orig@pickupfont}%
+\makeatother

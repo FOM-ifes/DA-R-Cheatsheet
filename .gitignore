@@ -218,3 +218,12 @@ TSWLatexianTemp*
 
 # expex forward references with \gathertags
 *-tags.tex
+.Rproj.user
+.Rhistory
+.RData
+.Ruserdata
+*_cache
+*_files
+texput.log
+local_backup
+.DS_Store
