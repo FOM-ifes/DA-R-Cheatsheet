@@ -11,8 +11,6 @@ output:
     includes:
       in_header: lib/header.tex
     pandoc_args:
-      - lang=de
-      - -V
       - --filter
       - pandoc-filter/typography.py
 documentclass: cheatsheet
