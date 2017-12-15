@@ -1,7 +1,7 @@
 ---
-title: "TestSheet"
-author: "Wer auch Immer"
-date: "11 12 2017"
+title: "Datenanalyse mit R mosaic"
+author: "Karsten Lübke"
+date: "`r Sys.Date()`"
 output: 
   pdf_document:
     template: NULL
@@ -26,143 +26,84 @@ knitr::opts_chunk$set(echo = TRUE)
 ```
 
 ## Vorbemerkungen
-Eine Übersicht von nützlichen R Funktionen innerhalb der Datenanalyse. 
-
-Diese Kurzreferenz beschreibt ein kleinen Teil der R Funktionen, wobei größtenteils auf das Zusatzpaket `mosaic` zurückgegriffen wird. Sie basiert größtenteils auf der Vignette [Minimal R](https://cran.r-project.org/web/packages/mosaic/vignettes/MinimalR.pdf) von Randall Pruim.
-
-Weitere Hilfe und Beispiele finden Sie, wenn Sie
-```{r eval=FALSE}
-?Befehl
-```
-eingeben.
 
 * R unterscheidet zwischen Groß- und Kleinbuchstaben
 * R verwendet den Punkt `.` als Dezimaltrennzeichen
 * Fehlende Werte werden in R durch `NA` kodiert
-* Kommentare werden mit dem Rautezeichen `#` eingeleitet; der Rest der Zeile von von R dann ignoriert.
-* R wendet Befehle direkt an
-* R ist objektorientiert, d. h. dieselbe Funktion hat evtl. je nach Funktionsargument unterschiedliche Rückgabewerte
-* Zusätzliche Funktionalität kann über Zusatzpakete hinzugeladen werden. Diese müssen ggf. zunächst  installiert werden
-* Mit der Pfeiltaste nach oben können Sie einen vorherigen Befehl in der Konsole wieder aufrufen
 * Eine Ergebniszuweiseung erfolgt über `<-`
+* Hilfe zur Funktion `foo`: `?foo` 
 
 Innerhalb von `mosaic`:
 ```{r eval=FALSE} 
-analysiere(y ~ x | z , data=Daten)
+analysiere(y ~ x | z , data = Daten)
 ```
-d. h., modelliere `y` in Abhängigkeit von `x` getrennt bzw. bedingt für `z` aus dem Datensatz `Daten`. Dabei können Teile (z. B. `y` und/ oder `z`) fehlen.^[Beim Mac ist `~` die Tastenkombination `alt`+`n`, `|` die Tastenkombination `alt`+`7`] 
+d. h., modelliere `y` in Abhängigkeit von `x` getrennt bzw. bedingt für `z` aus dem Datensatz `Daten`.^[Beim Mac ist `~` die Tastenkombination `alt`+`n`, `|` die Tastenkombination `alt`+`7`] 
 
 Zusatzpakete müssen vor der ersten Benutzung einmalig installiert und geladen werden:
 ```{r, eval=FALSE}
-install.packages("Paket") # Einmalig installieren
-library(Paket) # Laden, einmalig in jeder Sitzung
-
+# Einmalig installieren
+install.packages("Paket")
+# Laden, einmalig in jeder Sitzung
+library(Paket) 
 ```
 
 
 ## Daten
-Daten einlesen und Datenvorverarbeitung sind häufig der (zeitlich) aufwendigste Teil einer Datenanalyse. Da die Daten die Grundlage sind, sollte auch hier sorgfältig gearbeitet und überprüft werden.
 
-### Daten einlesen
+### Einlesen
 ```{r eval=FALSE}
-read.table() # Allgemeinen Datensatz einlesen. Achtung: Optionen anpassen
-read.csv2() # csv Datensatz einlesen (aus deutschsprachigem Excel)
-file.choose() # Datei auswählen
-meineDaten <- read.csv2(file.choose())
+Daten <- read.csv2() # csv Datensatz einlesen
+library(readxl) # Paket zum xlsx Import
+Daten <- read_excel() # xlsx Datensatz einlesen
 ```
 
-U. a. mit Hilfe des Zusatzpaketes `readxl` können Excel Dateien eingelesen werden:
+### Datenhandling
+Paket `dplyr` (mit `mosaic` geladen)
 ```{r eval=FALSE}
-meineDaten <- read_excel(file.choose()) 
-```
-
-### Daten verarbeiten
-```{r eval=FALSE}
-str() # Datenstruktur
-insprect() # Datenübersicht
-head() # Obere Zeilen
-tail() # Untere Zeilen
-nrow(); ncol() # Anzahl Zeilen; Spalten 
-rownames(); colnames() # Zeilennamen, Spaltennamen
-```
-
-### Daten transformieren
-Einzelne Variablen eines Datensatzes können über `$` ausgewählt werden: `Daten$Variable`. Allgemein kann über `Daten[i,j]` die i. Zeile und j. Spalte ausgewählt werden, wobei auch mehrere oder keine Zeile(n) bzw. Spalte(n) ausgewählt werden können. Über `c()` wird ein Vektor erzeugt.
-```{r eval=FALSE}
-as.factor() # Daten als Faktoren definieren
-relevel() # Faktorstufen umordnen
-droplevels() # Ungenutzte Faktorstufen entfernen
-recode() # Umkodierung von Werten, Paket car
-as.numeric() # Faktorstufen als numerische Daten verwenden
-cut() # Aufteilung numerischer Werte in Intervalle
-
-subset() # Teilmenge der Daten auswählen
-na.omit() # Zeilen mit fehlenden Werten entfernen
-
-log() # Logarithmusfunktion
-exp() # Exponentialfunktion
-sqrt() # Quadratwurzelfunktion
-abs() # Betragsfunktion
-
-rowSums() # Zeilensumme
-rowMeans() # Zeilenmittelwert
-```
-
-Innerhalb des Paketes `dplyr` (wird mit `mosaic` geladen) gibt es u. a. folgende Funktionen:
-```{r eval=FALSE}
-filter() # Filtert Beobachtungen eines Datensatzes
-select() # Wählt Variablen eines Datensatzes aus
-mutate() # Erzeugt neue Variable bzw. verändert bestehende
-arrange() # Sortiert Beobachtungen eines Datensatzes
-mutate() # Variablen verändern, neu erzeunge
-summarise() # Variablen zusammenfassen
+filter() # Beobachtungen filtern
+select() # Variablen wählen
+mutate() # Variablen verändern/ erzeugen
+summarise() # Beobachtungen zusammmenfassen
 group_by() # Beobachtungen gruppieren
-%>% # Übergebe das Ergebnis der vorhergehenden Funktion an die folgende
+%>% # Übergabe des Ergebnissen
 ```
 
+## Datenanalyse
 
-## Grafische Verfahren
-Vor jeder mathematisch-statistischen Analyse sollte eine explorative, grafische Analyse erfolgen. Die folgenden Befehle sind aus dem Paket `mosaic`.
+### Grafische Verfahren
 ```{r eval=FALSE}
 bargraph() # Balkendiagramm
 histogram() # Histogramm
 bwplot() # Boxplot
 xyplot() # Streudiagrmm
+mosaicplot() # Mosaikplot
 ```
 
-\pagebreak 
-
-Nicht aus dem Paket `mosaic` sind:
+### Kennzahlen
 ```{r eval=FALSE}
-mosaicplot() # Mosaicplot
-corrplot() # Korrelationsplot, Paket corrplot
-ggpairs() # Matrixplot, Paket GGally
-heatmap() # Heatmap
-```
-
-## Deskriptive Statistik
-Eine gute Zusammenfassung numerischer Variablen liefert der `mosaic` Befehl:
-```{r eval=FALSE}
-favstats()
-```
-Ansonsten (`mosaic` angepasst):
-```{r eval=FALSE}
+inspect() # Datenübersicht
 tally() # Tabellierung, Häufigkeiten 
 prop() # Anteile
+diffprop() # Differenz zweier Anteile
+favstats() # Kennzahlübersicht
 mean() # Arithmetischer Mittelwert
+diffmean() # Differenz zweier Mittelwerte
 median() # Median
 quantile() # Quantile
 sd() # Standardabweichung
-var() # Varianz
 IQR() # Interquartilsabstand
-cov() # Kovarianz
 cor() # Korrelationskoefizient
 ```
 
-## Inferenzstatistik
+## Verteilungen, Simulation
+
+### Normalverteilung
+```{r, eval=FALSE}
+xpnorm() # Verteilungsfunktion Normalverteilung
+xqnorm() # Quantilsfunktion Normalverteilung
+```
 
 ### Randomisierung, Simulationen
-Größtenteils `mosaic`:
 ```{r, eval=FALSE}
 set.seed() # Zufallszahlengenerator setzen
 rflip() # Münzwurf
@@ -170,82 +111,120 @@ do() # Wiederholung (Schleife)
 sample() # Stichprobe ohne Zurücklegen
 resample() # Stichprobe mit Zurücklegen
 shuffle() # Permutation
-rnorm() # Normalverteilte Zufallszahlen
 ```
 
-### Verteilungen
-Innerhalb der Funktionen müssen ggf. die Parameter, d. h. `mean=`, `sd=`, bzw. `df=` angepasst werden. (Das vorgestellte `x` steht für in `mosaic` angepasste Versionen.)
-```{r, eval=FALSE}
-xpchisq() # Verteilungsfunktion Chi² Verteilung
-xqchisq() # Quantilsfunktion Chi² Verteilung
-xpnorm() # Verteilungsfunktion Normalverteilung
-xqnorm() # Quantilsfunktion Normalverteilung
-xpt() # Verteilungsfunktion t-Verteilung
-xqt() # Quantilsfunktion t-Verteilung
-```
-Analoger Aufbau für weitere Verteilungen, z. B. `_pbinom()`, `_f()`.
-
-\pagebreak 
+## Inferenz/ Modellierung
 
 ### Testverfahren
-Einige der Testverfahren wurden von `mosaic` angepasst.
 ```{r eval=FALSE}
-t.test() # t-Test
 prop.test() # Binomialtest (approximativ)
-xchisq.test() # Chi²-Test
+xchisq.test() # Chi²-Tes
+t.test() # t-Test
 aov() # Varianzanalyse
 ```
 
-Der Nicht-parametrische Wilcoxon-Test `wilcox.test()` ist nicht im Paket `mosaic`, hat daher einen leicht anderen Funktionsaufruf. Einen Test auf Normalverteilung führt der Shapiro-Wilk Test durch: `shapiro.test()`. `cohensD()` aus dem Paket `lsr` berechnet die Effektgröße Cohens D. 
 
-
-## Multivariate Verfahren
+## Modellierung
 ```{r eval=FALSE}
 lm() # Lineare Regression
 glm(, family="binomial") # Logistische Regression
 plotModel() # Modell zeichnen
 coef() # Koeffizienten extrahieren
-residuals() # Residuen einer Regression
-fitted() # Angepasste Werte einer Regression
+residuals() # Residuen 
+fitted() # Angepasste Werte 
 predict() # Vorhersagen
 ```
-In `mosaic` kann das Ergebnis einer solchen Regression über `makeFun()` in eine einfache mathematische Funktion überführt werden. `plotFun()` zeichnet das Ergebnis. `step()` führt eine Variablenselektion durch. 
 
-Weitere Verfahren - nicht `mosaic`:
-```{r eval=FALSE}
-prcomp() # Hauptkomponentenanalyse (PCA)
-alpha() # Reliabilitätsanalys, Paket psych
-dist() # Distanzen
-hclust() # Hierachsiche Clusteranalyse
-kmeans() # k-Means Clusterverfahren
-rpart() # Klassifikations- und Regressionsbäume, Paket rpart
+## Beispielanalyse
+
+### Vorbereitung
+```{r, message=FALSE, results=FALSE}
+library(mosaic) # mosaic laden
+data(KidsFeet)  # Interner Datensatz
+inspect(KidsFeet)
 ```
 
-## Weitere Themen
-
-### Disparitäts- und Konzentrationsmessung
-
-Paket `ineq`:
-
+### Eine kategoriale Variable
 ```{r, eval=FALSE}
-Lc() # Loremzkurve
-ineq() # Gini Koeffizient (u. a.)
+bargraph( ~ domhand, data = KidsFeet)
+tally( ~ domhand, data = KidsFeet)
+prop( ~ domhand, success = "L", data = KidsFeet)
 ```
 
-
-### Zeitreihen
-
+### Eine metrische Variable
 ```{r, eval=FALSE}
-ma() # Gleitende Durchschnitte, Paket forecast
-stl() # Zeitreihe zerlegen
+histogram( ~ length, data = KidsFeet)
+favstats(~ length, data = KidsFeet)
 ```
 
-\pagebreak
+### Zwei kategoriale Variablen
+```{r, eval=FALSE}
+mosaicplot(biggerfoot ~ domhand, data = KidsFeet)
+tally(biggerfoot ~ domhand, data = KidsFeet)
+xchisq.test(biggerfoot ~ domhand, data = KidsFeet)
+```
 
-### Versionshinweise:
-Erstellt von Karsten Lübke unter der Lizenz [Creative Commons Attribution-ShareAlike 3.0 Unported](http://creativecommons.org/licenses/by-sa/3.0). 
+### Zwei numerische Variablen
+```{r, eval=FALSE}
+xyplot(width ~ length, data = KidsFeet)
+cor(width ~ length, data = KidsFeet)
+cor.test(width ~ length, data = KidsFeet)
+```
 
-* Datum erstellt: `r Sys.Date()`
+### Zwei Stichproben: kategorial
+```{r, eval=FALSE}
+bargraph( ~ domhand | sex, data = KidsFeet)
+prop(domhand ~ sex, success = "L", 
+     data = KidsFeet)
+prop.test(domhand ~ sex, success = "L", 
+          data = KidsFeet)
+``` 
+
+### Zwei Stichproben: numerisch
+```{r, eval=FALSE}
+histogram( ~ length | sex, data = KidsFeet)
+bwplot(length ~ sex, data = KidsFeet)
+favstats(length ~ sex, data = KidsFeet)
+t.test(length ~ sex, data = KidsFeet)
+```
+
+### Lineare Regression
+```{r, eval=FALSE}
+erglm <- lm(width ~ length + sex, data = KidsFeet)
+plotModel(erglm)
+summary(erglm)
+```
+```{r, echo=FALSE}
+erglm <- lm(width ~ length + sex, data = KidsFeet)
+plotModel(erglm)
+```
+
+### Bootstrap^[Datensatz hier eher zu klein für Bootstrap Perzentile]
+```{r}
+set.seed(1896) 
+Bootvtlg <- do(10000) * 
+  mean(~ length, data = resample(KidsFeet))
+histogram( ~ mean, data = Bootvtlg)
+# Bootstrap Konfidenzintervall
+quantile( ~ mean, probs = c(0.025, 0.975), 
+          data = Bootvtlg)
+```
+
+### Permutationstest
+```{r}
+set.seed(1896)
+mdiff <- diffmean(length ~ sex, data = KidsFeet)
+Nullvtlg <- do(10000) *
+  diffmean(length ~ shuffle(sex), data = KidsFeet)
+histogram( ~ diffmean, v=mdiff, data = Nullvtlg)
+# Permutationstest p-Wert, H_0: MW gleich
+prop( ~ abs(diffmean)>=abs(mdiff), data = Nullvtlg)
+```
+
+
+## Hinweise:
+
+* Lizenz [Creative Commons Attribution-ShareAlike 3.0 Unported](http://creativecommons.org/licenses/by-sa/3.0). 
 * R Version: `r getRversion()`
 * `mosaic` Version: `r packageVersion("mosaic")`
 
