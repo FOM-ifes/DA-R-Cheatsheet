@@ -33,7 +33,7 @@ knitr::opts_chunk$set(echo = TRUE)
 * Eine Ergebniszuweiseung erfolgt über `<-`
 * Hilfe zur Funktion `foo`: `?foo` 
 
-Innerhalb von `mosaic`:
+Innerhalb von `mosaic` [https://cran.r-project.org/package=mosaic](https://cran.r-project.org/package=mosaic):
 ```{r eval=FALSE} 
 analysiere(y ~ x | z , data = Daten)
 ```
@@ -118,7 +118,7 @@ shuffle() # Permutation
 ### Testverfahren
 ```{r eval=FALSE}
 prop.test() # Binomialtest (approximativ)
-xchisq.test() # Chi²-Tes
+xchisq.test() # Chi-Quadrat Unabhängigkeitstest
 t.test() # t-Test
 aov() # Varianzanalyse
 ```
