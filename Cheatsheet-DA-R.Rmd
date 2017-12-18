@@ -30,10 +30,10 @@ knitr::opts_chunk$set(echo = TRUE)
 * R unterscheidet zwischen Groß- und Kleinbuchstaben
 * R verwendet den Punkt `.` als Dezimaltrennzeichen
 * Fehlende Werte werden in R durch `NA` kodiert
-* Eine Ergebniszuweiseung erfolgt über `<-`
+* Eine Ergebniszuweisung erfolgt über `<-`
 * Hilfe zur Funktion `foo`: `?foo` 
 
-Innerhalb von `mosaic` [https://cran.r-project.org/package=mosaic](https://cran.r-project.org/package=mosaic):
+Innerhalb von [`mosaic`](https://cran.r-project.org/package=mosaic):
 ```{r eval=FALSE} 
 analysiere(y ~ x | z , data = Daten)
 ```
@@ -42,9 +42,9 @@ d. h., modelliere `y` in Abhängigkeit von `x` getrennt bzw. bedingt für `z` au
 Zusatzpakete müssen vor der ersten Benutzung einmalig installiert und geladen werden:
 ```{r, eval=FALSE}
 # Einmalig installieren
-install.packages("Paket")
+install.packages("mosaic")
 # Laden, einmalig in jeder Sitzung
-library(Paket) 
+library(mosaic) 
 ```
 
 
@@ -52,9 +52,11 @@ library(Paket)
 
 ### Einlesen
 ```{r eval=FALSE}
-Daten <- read.csv2() # csv Datensatz einlesen
+# csv Datensatz einlesen
+Daten <- read.csv2("Pfad/Datei") 
+# xlsx Datensatz einlesen
 library(readxl) # Paket zum xlsx Import
-Daten <- read_excel() # xlsx Datensatz einlesen
+Daten <- read_excel("Pfad/Datei") 
 ```
 
 ### Datenhandling
@@ -107,7 +109,7 @@ xqnorm() # Quantilsfunktion Normalverteilung
 ```{r, eval=FALSE}
 set.seed() # Zufallszahlengenerator setzen
 rflip() # Münzwurf
-do() # Wiederholung (Schleife)
+do() * # Wiederholung (Schleife)
 sample() # Stichprobe ohne Zurücklegen
 resample() # Stichprobe mit Zurücklegen
 shuffle() # Permutation
@@ -124,12 +126,12 @@ aov() # Varianzanalyse
 ```
 
 
-## Modellierung
+### Modellierung
 ```{r eval=FALSE}
 lm() # Lineare Regression
 glm(, family="binomial") # Logistische Regression
 plotModel() # Modell zeichnen
-coef() # Koeffizienten extrahieren
+anova() # ANOVA Tabelle
 residuals() # Residuen 
 fitted() # Angepasste Werte 
 predict() # Vorhersagen
@@ -193,6 +195,7 @@ t.test(length ~ sex, data = KidsFeet)
 erglm <- lm(width ~ length + sex, data = KidsFeet)
 plotModel(erglm)
 summary(erglm)
+anova(erglm)
 ```
 ```{r, echo=FALSE}
 erglm <- lm(width ~ length + sex, data = KidsFeet)
