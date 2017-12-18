@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
+
 '''
   Quick-Typographie-Filter: typography.py
 
@@ -11,6 +12,10 @@
   0.2 - 25.10.2017 (rm) - Verbesserte Version
   0.3 - 10.11.2017 (nm) - Erweiterte Version
   0.4 - 28.11.2017 (nm) - Erweiterte Version
+  0.5 - 08.12.2017 (nm) - Erste Versuche mit mbox und xspace
+  0.6 - 11.12.2017 (nm) - "thinspace " statt "\," in LaTeX
+  0.7 - 17.12.2017 (se) - Neue Abkürzungen eingeführt.
+  0.8 - 18.12.2017 (nm) - Teilweise Umstellen auf RegEx.
 
   WICHTIG:
   ========
@@ -23,6 +28,12 @@
     Also bitte ein
       > chmod a+x typography.py
    ausfuehren!
+
+  LaTeX:
+  ======
+  Der Befehl "xspace" benötigst das Paket "xspace".
+  Also bitte "usepackage{xspace}" einbauen!
+  Ab Version 0.6 wird von "\," auf "thinspace" umgestellt.
 
   Informationen zur Typographie:
   ==============================
@@ -50,15 +61,68 @@
 
 
 import panflute as pf
+import re as re
+import logging
 
-thinSpaceLaTeX = "\,"  # Schmales Leerzeichen in LaTeX
-thinSpaceHTML = "&thinsp;"    # Schmales Leerzeichen in HTML
+# create logger with 'spam_application'
+logging.basicConfig(filename='typography.log',level=logging.ERROR)
+
+thinSpaceLaTeX = "\\thinspace{}"  # Schmales Leerzeichen in LaTeX equiv. "\,"
+thinSpaceHTML = "&thinsp;"      # Schmales Leerzeichen in HTML
+xspace = "\\xspace{}"
+
+'''
+ Dieses Pattern sollte
+ x.y. / (x.y. / (x.y.: / (x.y.) / x.y.: ...
+ für alle Buchstaben x und y abdecken.
+'''
+pattern = "([\(,\[,<,\{]?\w\.)(\w\.[\),\],>]?[:,\,,\.,\!,\?]?[\),\],\},>]?)"
+
+recomp = re.compile(pattern)
 
 '''
     RawInline fuer LaTeX und HTML vorbereiten
 '''
 inlineLatex = pf.RawInline(thinSpaceLaTeX, format="latex")
+succLatex = pf.RawInline(xspace, format="latex")
 inlineHTML = pf.RawInline(thinSpaceHTML, format="html")
+succHTML = pf.RawInline("", format="html")
+
+
+def latexBlock(first, second):
+    return pf.RawInline("\mbox{"+first+thinSpaceLaTeX+second+"}"+xspace,
+                        format="latex")
+
+
+def htmlBlock(first, second):
+    return pf.RawInline(first+thinspaceHTML+second, format="html")
+
+
+def newBlock(first, second, format):
+    if format == "html":
+        return htmlBlock(first, second)
+    if format == "latex":
+        return latexBlock(first, second)
+
+
+def latexBlockThree(first, second, third):
+    return pf.RawInline("\mbox{" + first + thinSpaceLaTeX +
+                        second + thinSpaceLaTeX + third + "}" +
+                        xspace, format="latex")
+
+
+def htmlBlockThree(first, second, third,):
+    return pf.RawInline(first + thinSpaceHTML + second +
+                        thinSpaceHTML + third,
+                        format="html")
+
+
+def newBlockThree(first, second, third, format):
+    if format == "html":
+        return htmlBlockThree(first, second, third)
+
+    if format == "latex":
+        return latexBlockThree(first, second, third)
 
 
 def action(elem, doc):
@@ -70,8 +134,10 @@ def action(elem, doc):
         passende RawInline Zeile aus
     '''
     inline = inlineLatex
+    succ = succLatex
     if doc.format == "html":
         inline = inlineHTML
+        succ = succHTML
 
     '''
         Der Filter
@@ -83,29 +149,21 @@ def action(elem, doc):
             u.a. / z.B. / d.h. / c.p. / s.u. / s.o.
             angepasst!
         '''
-        if (txtlen == 4):
-            if (elem.text == "u.a."):
-                return [pf.Str("u."), inline, pf.Str("a.")]
-            if (elem.text == "z.B."):
-                return [pf.Str("z."), inline, pf.Str("B.")]
-            if (elem.text == "d.h."):
-                return [pf.Str("d."), inline, pf.Str("h.")]
-            if (elem.text == "c.p."):
-                return [pf.Str("c."), inline, pf.Str("p.")]
-            if (elem.text == "s.u."):
-                return [pf.Str("s."), inline, pf.Str("u.")]
-            if (elem.text == "s.o."):
-                return [pf.Str("s."), inline, pf.Str("o.")]
+        text = elem.text
+        succtxt = ""
+        pretxt = ""
+
         '''
-            Hier wird:
-            u.v.m. / i.d.R
-            angepasst!
+            Pruefung mittels RegEx!
         '''
-        if (txtlen == 6):
-            if (elem.text == "u.v.m."):
-                return [pf.Str("u."), inline, pf.Str("v."), inline, pf.Str("m.")]
-            if (elem.text == "i.d.R."):
-                return [pf.Str("i."), inline, pf.Str("d."), inline, pf.Str("R.")]
+        splt = recomp.split(elem.text)
+        logging.debug("Text: "+elem.text+" \t "+str(splt))
+        if len(splt) == 4:
+            if splt[3] == "":
+                return newBlock(splt[1], splt[2], doc.format)
+            else:
+                return newBlockThree(splt[1], splt[2], splt[3], doc.format)
+
         '''
             Hier wird
             Text/ Text -> Text\,/
@@ -114,8 +172,10 @@ def action(elem, doc):
         if txtlen > 2:
             if (elem.text[-1] == "/") and isinstance(elem.next, pf.Space):
                 return [pf.Str(elem.text[:-1]), inline, pf.Str("/")]
+
         if (elem.text == "/") and isinstance(elem.prev, pf.Para):
             return [inline, pf.Str("/")]
+
     if isinstance(elem, pf.Space):
         '''
             Hier wird
@@ -138,13 +198,15 @@ def action(elem, doc):
                 prevStr = elem.prev.text[-2:]  # letzen zwei Zeichen
                 nextStr = elem.next.text[0:2]  # naechsten zwei Zeichen
                 if (prevStr[1] == ".") and (nextStr[1] == "."):
-                    if (prevStr[0] in ["u", "z", "Z", "d", "D", "p", "c", "s"]):  # u. z. Z. d. p. u. c.
-                        if (nextStr[0] in ["a", "B", "h", "a", "Ä", "p", "o", "u"]):  # a. B. B. h. a. Ä p.
+                    if (prevStr[0] in ["u", "z", "Z", "d", "D", "p", "c", "s", "m"]):  # u. z. Z. d. p. u. c. m.
+                        if (nextStr[0] in ["a", "B", "h", "a", "Ä", "p", "o", "u", "W"]):  # a. B. B. h. a. Ä p. W.
                             return inline
 
 
 def main():
+    logging.debug("Start typography.py")
     pf.toJSONFilter(action=action)
+    logging.debug("End typography.py")
 
 
 if __name__ == "__main__":
