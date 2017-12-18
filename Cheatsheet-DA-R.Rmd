@@ -22,7 +22,9 @@ classoption:
 ---
 
 ```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = TRUE)
+knitr::opts_chunk$set(
+  echo = TRUE,       # In der Regel die Chunks ausgeben!
+  warning = FALSE)   # Warnungen überdrücken!
 ```
 
 ## Vorbemerkungen
