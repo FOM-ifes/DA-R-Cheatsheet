@@ -37,7 +37,7 @@ Innerhalb von [`mosaic`](https://cran.r-project.org/package=mosaic):
 ```{r eval=FALSE} 
 analysiere(y ~ x | z , data = Daten)
 ```
-d. h., modelliere `y` in Abhängigkeit von `x` getrennt bzw. bedingt für `z` aus dem Datensatz `Daten`.^[Beim Mac ist `~` die Tastenkombination `alt`+`n`, `|` die Tastenkombination `alt`+`7`] 
+d.h., modelliere `y` in Abhängigkeit von `x` getrennt bzw. bedingt für `z` aus dem Datensatz `Daten`.^[Beim Mac ist `~` die Tastenkombination `alt`+`n`, `|` die Tastenkombination `alt`+`7`] 
 
 Zusatzpakete müssen vor der ersten Benutzung einmalig installiert und geladen werden:
 ```{r, eval=FALSE}
