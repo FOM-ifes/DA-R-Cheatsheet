@@ -90,10 +90,6 @@ diffprop() # Differenz zweier Anteile
 favstats() # Kennzahlübersicht
 mean() # Arithmetischer Mittelwert
 diffmean() # Differenz zweier Mittelwerte
-median() # Median
-quantile() # Quantile
-sd() # Standardabweichung
-IQR() # Interquartilsabstand
 cor() # Korrelationskoefizient
 ```
 
@@ -143,6 +139,7 @@ predict() # Vorhersagen
 ```{r, message=FALSE, results=FALSE}
 library(mosaic) # mosaic laden
 data(KidsFeet)  # Interner Datensatz
+?KidsFeet # Hilfe zum Datensatz
 inspect(KidsFeet)
 ```
 
