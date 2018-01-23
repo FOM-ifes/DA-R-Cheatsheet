@@ -238,6 +238,8 @@ ergglm <- glm(sex ~ length, family = binomial,
 plotModel(ergglm)
 summary(ergglm)
 anova(ergglm)
+# Odds Ratio
+exp(coef(ergglm))
 ```
 ```{r, echo=FALSE}
 ergglm <- glm(sex ~ length, family = binomial,
