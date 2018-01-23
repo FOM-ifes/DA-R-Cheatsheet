@@ -19,6 +19,8 @@ lang: de
 classoption: 
   - "landscape"
   - "columns=3"
+editor_options: 
+  chunk_output_type: console
 ---
 
 ```{r setup, include=FALSE}
@@ -133,7 +135,11 @@ anova() # ANOVA Tabelle
 residuals() # Residuen 
 fitted() # Angepasste Werte 
 predict() # Vorhersagen
+prcomp() # Hauptkomponentenanalyse
+kmeans() # K-Means Clusteranalyse
 ```
+
+\newpage
 
 ## Beispielanalyse
 
@@ -223,6 +229,88 @@ histogram( ~ diffmean, v=mdiff, data = Nullvtlg)
 prop( ~ abs(diffmean)>=abs(mdiff), data = Nullvtlg)
 ```
 
+\newpage
+
+### Logistische Regression
+```{r, eval=FALSE}
+ergglm <- glm(sex ~ length, family = binomial,
+              data = KidsFeet)
+plotModel(ergglm)
+summary(ergglm)
+anova(ergglm)
+```
+```{r, echo=FALSE}
+ergglm <- glm(sex ~ length, family = binomial,
+              data = KidsFeet)
+plotModel(ergglm)
+```
+
+
+### Hauptkomponentenanalyse (PCA)
+```{r, eval=FALSE}
+ergpca <- prcomp( ~ length + width, 
+                  data = KidsFeet)
+plot(ergpca) # Screeplot
+summary(ergpca)
+biplot(ergpca)
+```
+
+```{r, echo=FALSE, fig.align="center"}
+ergpca <- prcomp( ~ length + width,
+                  data = KidsFeet)
+biplot(ergpca,
+       cex = 0.5,
+       cex.axis = 0.5,
+       cex.lab = 0.5)
+```
+
+
+### Clusteranalyse
+```{r, eval=FALSE}
+set.seed(1896)
+# Numerische Variablen auswählen
+KidsFeetnumeric <- KidsFeet %>%
+  select(length, width)
+ergkmeans <- kmeans(KidsFeetnumeric, 
+                    centers = 2) # k=2
+ergkmeans
+```
+
+```{r, echo=FALSE}
+set.seed(1896)
+KidsFeetnumeric <- KidsFeet %>%
+  select(length, width)
+ergkmeans <- kmeans(KidsFeetnumeric, centers = 2) # k=2
+xyplot(width ~ length, col = ergkmeans$cluster, 
+       pch = as.character(ergkmeans$cluster), cex = 1.2,
+       data = KidsFeet)
+```
+
+
+## Zeitreihenzerlegung^[Anderer Beispieldatensatz.]
+```{r, eval=FALSE}
+library(forecast) # Paket forecast laden
+data(wineind) # Interner Datensatz 
+?wineind # Hilfe zum Datesatz
+wineind
+plot(wineind)
+# Zerlegung
+ergstl <- stl(wineind, s.window = 11)
+plot(ergstl)
+# Vorhersagen
+predstl <- predict(ergstl)
+plot(predstl)
+```
+
+```{r, echo=FALSE}
+library(forecast) # Paket laden
+data(wineind) # Interner Datensatz 
+# Zerlegung
+ergstl <- stl(wineind, s.window = 11)
+# Vorhersagen
+predstl <- predict(ergstl)
+plot(predstl)
+```
 
 ---
 
