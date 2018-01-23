@@ -64,35 +64,35 @@ Daten <- read_excel("Pfad/Datei")
 ### Datenhandling
 Paket `dplyr` (mit `mosaic` geladen)
 ```{r eval=FALSE}
-filter() # Beobachtungen filtern
-select() # Variablen wählen
-mutate() # Variablen verändern/ erzeugen
+filter()    # Beobachtungen filtern
+select()    # Variablen wählen
+mutate()    # Variablen verändern/ erzeugen
 summarise() # Beobachtungen zusammmenfassen
-group_by() # Beobachtungen gruppieren
-%>% # Übergabe von Ergebnissen
+group_by()  # Beobachtungen gruppieren
+%>%         # Übergabe von Ergebnissen
 ```
 
 ## Datenanalyse
 
 ### Grafische Verfahren
 ```{r eval=FALSE}
-bargraph() # Balkendiagramm
-histogram() # Histogramm
-bwplot() # Boxplot
-xyplot() # Streudiagrmm
+bargraph()   # Balkendiagramm
+histogram()  # Histogramm
+bwplot()     # Boxplot
+xyplot()     # Streudiagrmm
 mosaicplot() # Mosaikplot
 ```
 
 ### Kennzahlen
 ```{r eval=FALSE}
-inspect() # Datenübersicht
-tally() # Tabellierung, Häufigkeiten 
-prop() # Anteile
+inspect()  # Datenübersicht
+tally()    # Tabellierung, Häufigkeiten 
+prop()     # Anteile
 diffprop() # Differenz zweier Anteile
 favstats() # Kennzahlübersicht
-mean() # Arithmetischer Mittelwert
+mean()     # Arithmetischer Mittelwert
 diffmean() # Differenz zweier Mittelwerte
-cor() # Korrelationskoefizient
+cor()      # Korrelationskoefizient
 ```
 
 ## Verteilungen, Simulation
@@ -106,43 +106,43 @@ xqnorm() # Quantilsfunktion Normalverteilung
 ### Randomisierung, Simulationen
 ```{r, eval=FALSE}
 set.seed() # Zufallszahlengenerator setzen
-rflip() # Münzwurf
-do() * # Wiederholung (Schleife)
-sample() # Stichprobe ohne Zurücklegen
+rflip()    # Münzwurf
+do() *     # Wiederholung (Schleife)
+sample()   # Stichprobe ohne Zurücklegen
 resample() # Stichprobe mit Zurücklegen
-shuffle() # Permutation
+shuffle()  # Permutation
 ```
 
 ## Inferenz/ Modellierung
 
 ### Testverfahren
 ```{r eval=FALSE}
-prop.test() # Binomialtest (approximativ)
+prop.test()   # Binomialtest (approximativ)
 xchisq.test() # Chi-Quadrat Unabhängigkeitstest
-t.test() # t-Test
-aov() # Varianzanalyse
+t.test()      # t-Test
+aov()         # Varianzanalyse (ANOVA)
 ```
 
 
 ### Modellierung
 ```{r eval=FALSE}
-lm() # Lineare Regression
+lm()                     # Lineare Regression
 glm(, family="binomial") # Logistische Regression
-plotModel() # Modell zeichnen
-anova() # ANOVA Tabelle
-residuals() # Residuen 
-fitted() # Angepasste Werte 
-predict() # Vorhersagen
+plotModel()              # Modell zeichnen
+anova()                  # ANOVA Tabelle
+residuals()              # Residuen 
+fitted()                 # Angepasste Werte 
+predict()                # Vorhersagen
 ```
 
 ## Beispielanalyse
 
 ### Vorbereitung
 ```{r, message=FALSE, results=FALSE}
-library(mosaic) # mosaic laden
-data(KidsFeet)  # Interner Datensatz
-?KidsFeet # Hilfe zum Datensatz
-inspect(KidsFeet)
+library(mosaic)   # mosaic laden
+data(KidsFeet)    # Interner Datensatz
+?KidsFeet         # Hilfe zum Datensatz
+inspect(KidsFeet) # Deskriptive Daten
 ```
 
 ### Eine kategoriale Variable
