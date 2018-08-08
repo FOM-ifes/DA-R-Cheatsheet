@@ -210,7 +210,7 @@ plotModel(erglm)
 ```
 
 ### Bootstrap^[Datensatz hier eher zu klein für Bootstrap Perzentile]
-```{r}
+```{r, out.width="90%"}
 set.seed(1896) 
 Bootvtlg <- do(10000) * 
   mean(~ length, data = resample(KidsFeet))
@@ -221,7 +221,7 @@ quantile( ~ mean, probs = c(0.025, 0.975),
 ```
 
 ### Permutationstest
-```{r}
+```{r, out.width="90%"}
 set.seed(1896)
 mdiff <- diffmean(length ~ sex, data = KidsFeet)
 Nullvtlg <- do(10000) *
