@@ -1,5 +1,5 @@
 ---
-title: "Datenanalyse mit R mosaic"
+title: "Datenanalyse mit R mosaic und ggformula"
 author: "Karsten Lübke"
 date: "`r Sys.Date()`"
 output: 
@@ -56,6 +56,7 @@ library(mosaic)
 
 ### Einlesen
 ```{r eval=FALSE}
+getwd() # Aktuelles Arbeitsverzeichnis
 # csv Datensatz einlesen
 Daten <- read.csv2("Pfad/Datei") 
 # xlsx Datensatz einlesen
@@ -71,20 +72,37 @@ select()    # Variablen wählen
 mutate()    # Variablen verändern/ erzeugen
 summarise() # Beobachtungen zusammmenfassen
 group_by()  # Beobachtungen gruppieren
+case_when() # Fallunterscheidung
 %>%         # Übergabe von Ergebnissen
+```
+
+### Logik
+
+```{r, eval=FALSE}
+== ; != # Gleichheit bzw. Ungleichheit
+> ; >= ; <= ; < # größer bzw. kleiner (gleich)
+& ; | # und bzw. oder
+```
+
+### Arithmetik
+
+```{r, eval=FALSE}
++ ; -  ; * ; : # Grundrechenarten
+^ ; sqrt(x) # Potenz bzw. Quadratwurzel
+exp(x) ; log(x) # e^x bzw. ln(x)
+abs(x) # Absolutbetrag
+
 ```
 
 ## Datenanalyse
 
 ### Grafische Verfahren
 ```{r eval=FALSE}
-bargraph()   # Balkendiagramm
-histogram()  # Histogramm
-bwplot()     # Boxplot
-xyplot()     # Streudiagrmm
-mosaicplot() # Mosaikplot
-# Plot von Mittelwert und Konidenzintervall:
-gplots::plotmeans() 
+gf_bar()   # Balkendiagramm
+gf_histogram()  # gf_histogramm
+gf_boxplot()     # Boxplot
+gf_point()     # Streudiagrmm
+mosaicplot() # Mosaikplot (nicht ggformula)
 ```
 
 ### Kennzahlen
@@ -105,6 +123,7 @@ cor()      # Korrelationskoefizient
 ```{r, eval=FALSE}
 xpnorm() # Verteilungsfunktion Normalverteilung
 xqnorm() # Quantilsfunktion Normalverteilung
+gf_qq() # QQ-Plot (allgemein)
 ```
 
 ### Randomisierung, Simulationen
@@ -124,7 +143,7 @@ shuffle()  # Permutation
 prop.test()   # Binomialtest (approximativ)
 xchisq.test() # Chi-Quadrat Unabhängigkeitstest
 t.test()      # t-Test
-aov()         # Varianzanalyse (ANOVA)
+aov()         # Varianzanalyse
 ```
 
 
@@ -133,7 +152,6 @@ aov()         # Varianzanalyse (ANOVA)
 lm()                     # Lineare Regression
 glm(, family="binomial") # Logistische Regression
 plotModel()              # Modell zeichnen
-anova()                  # ANOVA Tabelle
 residuals()              # Residuen 
 fitted()                 # Angepasste Werte 
 predict()                # Vorhersagen
@@ -153,16 +171,17 @@ data(KidsFeet)    # Interner Datensatz
 inspect(KidsFeet) # Deskriptive Daten
 ```
 
+
 ### Eine kategoriale Variable
 ```{r, eval=FALSE}
-bargraph( ~ domhand, data = KidsFeet)
+gf_bar( ~ domhand, data = KidsFeet)
 tally( ~ domhand, data = KidsFeet)
 prop( ~ domhand, success = "L", data = KidsFeet)
 ```
 
 ### Eine metrische Variable
 ```{r, eval=FALSE}
-histogram( ~ length, data = KidsFeet)
+gf_histogram( ~ length, data = KidsFeet)
 favstats(~ length, data = KidsFeet)
 ```
 
@@ -175,14 +194,14 @@ xchisq.test(biggerfoot ~ domhand, data = KidsFeet)
 
 ### Zwei numerische Variablen
 ```{r, eval=FALSE}
-xyplot(width ~ length, data = KidsFeet)
+gf_point(width ~ length, data = KidsFeet)
 cor(width ~ length, data = KidsFeet)
 cor.test(width ~ length, data = KidsFeet)
 ```
 
 ### Zwei Stichproben: kategorial
 ```{r, eval=FALSE}
-bargraph( ~ domhand | sex, data = KidsFeet)
+gf_bar( ~ domhand | sex, data = KidsFeet)
 prop(domhand ~ sex, success = "L", 
      data = KidsFeet)
 prop.test(domhand ~ sex, success = "L", 
@@ -191,8 +210,8 @@ prop.test(domhand ~ sex, success = "L",
 
 ### Zwei Stichproben: numerisch
 ```{r, eval=FALSE}
-histogram( ~ length | sex, data = KidsFeet)
-bwplot(length ~ sex, data = KidsFeet)
+gf_histogram( ~ length | sex, data = KidsFeet)
+gf_boxplot(length ~ sex, data = KidsFeet)
 favstats(length ~ sex, data = KidsFeet)
 t.test(length ~ sex, data = KidsFeet)
 ```
@@ -202,7 +221,6 @@ t.test(length ~ sex, data = KidsFeet)
 erglm <- lm(width ~ length + sex, data = KidsFeet)
 plotModel(erglm)
 summary(erglm)
-anova(erglm)
 ```
 ```{r, echo=FALSE}
 erglm <- lm(width ~ length + sex, data = KidsFeet)
@@ -214,7 +232,7 @@ plotModel(erglm)
 set.seed(1896) 
 Bootvtlg <- do(10000) * 
   mean(~ length, data = resample(KidsFeet))
-histogram( ~ mean, data = Bootvtlg)
+gf_histogram( ~ mean, data = Bootvtlg)
 # Bootstrap Konfidenzintervall
 quantile( ~ mean, probs = c(0.025, 0.975), 
           data = Bootvtlg)
@@ -226,7 +244,8 @@ set.seed(1896)
 mdiff <- diffmean(length ~ sex, data = KidsFeet)
 Nullvtlg <- do(10000) *
   diffmean(length ~ shuffle(sex), data = KidsFeet)
-histogram( ~ diffmean, v=mdiff, data = Nullvtlg)
+gf_histogram( ~ diffmean, data = Nullvtlg) %>%
+  gf_vline(xintercept = mdiff)
 # Permutationstest p-Wert, H_0: MW gleich
 prop( ~ abs(diffmean)>=abs(mdiff), data = Nullvtlg)
 ```
@@ -239,7 +258,6 @@ ergglm <- glm(sex ~ length, family = binomial,
               data = KidsFeet)
 plotModel(ergglm)
 summary(ergglm)
-anova(ergglm)
 # Odds Ratio
 exp(coef(ergglm))
 ```
@@ -285,18 +303,16 @@ set.seed(1896)
 KidsFeetnumeric <- KidsFeet %>%
   select(length, width)
 ergkmeans <- kmeans(KidsFeetnumeric, centers = 2) # k=2
-xyplot(width ~ length, col = ergkmeans$cluster, 
-       pch = as.character(ergkmeans$cluster), cex = 1.2,
+gf_point(width ~ length, col = ergkmeans$cluster, 
        data = KidsFeet)
 ```
 
 
-## Zeitreihenzerlegung^[Anderer Beispieldatensatz.]
+### Zeitreihenzerlegung^[Anderer Beispieldatensatz.]
 ```{r, eval=FALSE}
 library(forecast) # Paket forecast laden
 data(wineind)     # Interner Datensatz 
 ?wineind          # Hilfe zum Datesatz
-wineind
 plot(wineind)
 # Zerlegung
 ergstl <- stl(wineind, s.window = 11)
@@ -314,6 +330,25 @@ ergstl <- stl(wineind, s.window = 11)
 # Vorhersagen
 predstl <- predict(ergstl)
 plot(predstl)
+```
+
+### Datenhandling
+
+```{r, eval=FALSE}
+# Variablen selektieren
+KidsFeet.length <- KidsFeet %>%
+  select(length)
+# Beobachtungen auswählen
+KidsFeet.boys <- KidsFeet %>%
+  filter(sex == "B")
+# Variablen erzeugen
+KidsFeet.in <- KidsFeet %>%
+  mutate(length.in = 0.394*length)
+# Bedingungen
+KidsFeet.grouped <- KidsFeet %>%
+  mutate(length.grouped = case_when(
+    length > 25 ~ "large",
+    length <= 25 ~ "not large"))
 ```
 
 ---
