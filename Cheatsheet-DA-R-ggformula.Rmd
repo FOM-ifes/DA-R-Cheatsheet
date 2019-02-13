@@ -344,6 +344,11 @@ KidsFeet.boys <- KidsFeet %>%
 # Variablen erzeugen
 KidsFeet.in <- KidsFeet %>%
   mutate(length.in = 0.394*length)
+# Bedingungen
+KidsFeet.grouped <- KidsFeet %>%
+  mutate(length.grouped = case_when(
+    length > 25 ~ "large",
+    length <= 25 ~ "not large"))
 ```
 
 ---
