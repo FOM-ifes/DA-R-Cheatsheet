@@ -1,5 +1,8 @@
 ---
-title: "Datenanalyse mit R mosaic und ggformula"
+title: |
+    | Datenanalyse mit R mosaic  
+    | und ggformula
+    
 author: "Karsten Lübke"
 date: "`r Sys.Date()`"
 output: 
@@ -164,7 +167,8 @@ kmeans()                 # K-Means Clusteranalyse
 ## Beispielanalyse
 
 ### Vorbereitung
-```{r, message=FALSE, results=FALSE}
+
+```{r, message=FALSE, results=FALSE, eval = c(1,2,4)}
 library(mosaic)   # mosaic laden
 data(KidsFeet)    # Interner Datensatz
 ?KidsFeet         # Hilfe zum Datensatz
@@ -215,6 +219,8 @@ gf_boxplot(length ~ sex, data = KidsFeet)
 favstats(length ~ sex, data = KidsFeet)
 t.test(length ~ sex, data = KidsFeet)
 ```
+<!-- Eingefügt, da Überschriften sonst verschluckt. -->
+$\,$
 
 ### Lineare Regression
 ```{r, eval=FALSE}
@@ -277,7 +283,7 @@ summary(ergpca)
 biplot(ergpca)
 ```
 
-```{r, echo=FALSE, fig.align="center"}
+```{r, echo=FALSE, fig.align="center", out.extra = "trim = 30mm 5mm 30mm 10mm, clip"}
 ergpca <- prcomp( ~ length + width,
                   data = KidsFeet)
 biplot(ergpca,
@@ -285,9 +291,13 @@ biplot(ergpca,
        cex.axis = 0.5,
        cex.lab = 0.5)
 ```
-
+<!-- Eingefügt, da Überschriften sonst verschluckt. -->
+$\,$
 
 ### Clusteranalyse
+<!-- Eingefügt, da Überschriften sonst verschluckt. -->
+$\,$
+\vspace{-1cm}
 ```{r, eval=FALSE}
 set.seed(1896)
 # Numerische Variablen auswählen
@@ -309,6 +319,9 @@ gf_point(width ~ length, col = ergkmeans$cluster,
 
 
 ### Zeitreihenzerlegung^[Anderer Beispieldatensatz.]
+<!-- Eingefügt, da Überschriften sonst verschluckt. -->
+$\,$
+\vspace{-1cm}
 ```{r, eval=FALSE}
 library(forecast) # Paket forecast laden
 data(wineind)     # Interner Datensatz 
@@ -331,6 +344,7 @@ ergstl <- stl(wineind, s.window = 11)
 predstl <- predict(ergstl)
 plot(predstl)
 ```
+
 
 ### Datenhandling
 
