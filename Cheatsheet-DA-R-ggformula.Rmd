@@ -98,11 +98,11 @@ abs(x) # Absolutbetrag
 
 ### Grafische Verfahren
 ```{r eval=FALSE}
-gf_bar()   # Balkendiagramm
-gf_histogram()  # gf_histogramm
-gf_boxplot()     # Boxplot
-gf_point()     # Streudiagrmm
-mosaicplot() # Mosaikplot (nicht ggformula)
+gf_bar()        # Säulendiagramm
+gf_histogram()  # Histogramm
+gf_boxplot()    # Boxplot
+gf_point()      # Streudiagrmm
+mosaicplot()    # Mosaikplot (nicht ggformula)
 ```
 
 ### Kennzahlen
@@ -307,6 +307,25 @@ gf_point(width ~ length, col = ergkmeans$cluster,
        data = KidsFeet)
 ```
 
+### Datenhandling
+
+```{r, eval=FALSE}
+# Variablen selektieren
+KidsFeet.length <- KidsFeet %>%
+  select(length)
+# Beobachtungen auswählen
+KidsFeet.boys <- KidsFeet %>%
+  filter(sex == "B")
+# Variablen erzeugen
+KidsFeet.in <- KidsFeet %>%
+  mutate(length.in = 0.394*length)
+# Bedingungen
+KidsFeet.grouped <- KidsFeet %>%
+  mutate(length.grouped = case_when(
+    length > 25 ~ "large",
+    length <= 25 ~ "not large"))
+```
+
 
 ### Zeitreihenzerlegung^[Anderer Beispieldatensatz.]
 ```{r, eval=FALSE}
@@ -332,24 +351,6 @@ predstl <- predict(ergstl)
 plot(predstl)
 ```
 
-### Datenhandling
-
-```{r, eval=FALSE}
-# Variablen selektieren
-KidsFeet.length <- KidsFeet %>%
-  select(length)
-# Beobachtungen auswählen
-KidsFeet.boys <- KidsFeet %>%
-  filter(sex == "B")
-# Variablen erzeugen
-KidsFeet.in <- KidsFeet %>%
-  mutate(length.in = 0.394*length)
-# Bedingungen
-KidsFeet.grouped <- KidsFeet %>%
-  mutate(length.grouped = case_when(
-    length > 25 ~ "large",
-    length <= 25 ~ "not large"))
-```
 
 ---
 
