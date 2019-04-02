@@ -1,5 +1,8 @@
 ---
-title: "Datenanalyse mit R mosaic und ggformula"
+title: |
+    | Datenanalyse mit R mosaic  
+    | und ggformula
+    
 author: "Karsten Lübke"
 date: "`r Sys.Date()`"
 output: 
@@ -155,8 +158,6 @@ plotModel()              # Modell zeichnen
 residuals()              # Residuen 
 fitted()                 # Angepasste Werte 
 predict()                # Vorhersagen
-prcomp()                 # Hauptkomponentenanalyse
-kmeans()                 # K-Means Clusteranalyse
 ```
 
 \newpage
@@ -164,11 +165,12 @@ kmeans()                 # K-Means Clusteranalyse
 ## Beispielanalyse
 
 ### Vorbereitung
-```{r, message=FALSE, results=FALSE}
+
+```{r, message=FALSE, results=FALSE, eval = c(1,2,4)}
 library(mosaic)   # mosaic laden
 data(KidsFeet)    # Interner Datensatz
 ?KidsFeet         # Hilfe zum Datensatz
-inspect(KidsFeet) # Deskriptive Daten
+inspect(KidsFeet) # Datenübersicht
 ```
 
 
@@ -179,15 +181,17 @@ tally( ~ domhand, data = KidsFeet)
 prop( ~ domhand, success = "L", data = KidsFeet)
 ```
 
+
 ### Eine metrische Variable
 ```{r, eval=FALSE}
 gf_histogram( ~ length, data = KidsFeet)
 favstats(~ length, data = KidsFeet)
 ```
 
+
 ### Zwei kategoriale Variablen
 ```{r, eval=FALSE}
-mosaicplot(biggerfoot ~ domhand, data = KidsFeet)
+mosaicplot(domhand ~ biggerfoot, data = KidsFeet)
 tally(biggerfoot ~ domhand, data = KidsFeet)
 xchisq.test(biggerfoot ~ domhand, data = KidsFeet)
 ```
@@ -199,6 +203,7 @@ cor(width ~ length, data = KidsFeet)
 cor.test(width ~ length, data = KidsFeet)
 ```
 
+
 ### Zwei Stichproben: kategorial
 ```{r, eval=FALSE}
 gf_bar( ~ domhand | sex, data = KidsFeet)
@@ -208,6 +213,7 @@ prop.test(domhand ~ sex, success = "L",
           data = KidsFeet)
 ``` 
 
+
 ### Zwei Stichproben: numerisch
 ```{r, eval=FALSE}
 gf_histogram( ~ length | sex, data = KidsFeet)
@@ -215,6 +221,7 @@ gf_boxplot(length ~ sex, data = KidsFeet)
 favstats(length ~ sex, data = KidsFeet)
 t.test(length ~ sex, data = KidsFeet)
 ```
+
 
 ### Lineare Regression
 ```{r, eval=FALSE}
@@ -238,6 +245,7 @@ quantile( ~ mean, probs = c(0.025, 0.975),
           data = Bootvtlg)
 ```
 
+
 ### Permutationstest
 ```{r, out.width="90%"}
 set.seed(1896)
@@ -246,9 +254,10 @@ Nullvtlg <- do(10000) *
   diffmean(length ~ shuffle(sex), data = KidsFeet)
 gf_histogram( ~ diffmean, data = Nullvtlg) %>%
   gf_vline(xintercept = mdiff)
-# Permutationstest p-Wert, H_0: MW gleich
+# Permutationstest p-Wert
 prop( ~ abs(diffmean)>=abs(mdiff), data = Nullvtlg)
 ```
+
 
 \newpage
 
@@ -268,66 +277,52 @@ plotModel(ergglm)
 ```
 
 
-### Hauptkomponentenanalyse (PCA)
-```{r, eval=FALSE}
-ergpca <- prcomp( ~ length + width, 
-                  data = KidsFeet)
-plot(ergpca) # Screeplot
-summary(ergpca)
-biplot(ergpca)
-```
+<!-- ### Hauptkomponentenanalyse (PCA) -->
+<!-- <!-- Eingefügt, da Überschriften sonst verschluckt. --> -->
+<!-- $\,$ -->
+<!-- ```{r, eval=FALSE} -->
+<!-- ergpca <- prcomp( ~ length + width,  -->
+<!--                   data = KidsFeet) -->
+<!-- plot(ergpca) # Screeplot -->
+<!-- summary(ergpca) -->
+<!-- biplot(ergpca) -->
+<!-- ``` -->
 
-```{r, echo=FALSE, fig.align="center"}
-ergpca <- prcomp( ~ length + width,
-                  data = KidsFeet)
-biplot(ergpca,
-       cex = 0.5,
-       cex.axis = 0.5,
-       cex.lab = 0.5)
-```
+<!-- ```{r, echo=FALSE, fig.align="center", out.extra = "trim = 30mm 5mm 30mm 10mm, clip"} -->
+<!-- ergpca <- prcomp( ~ length + width, -->
+<!--                   data = KidsFeet) -->
+<!-- biplot(ergpca, -->
+<!--        cex = 0.5, -->
+<!--        cex.axis = 0.5, -->
+<!--        cex.lab = 0.5) -->
+<!-- ``` -->
 
+<!-- ### Clusteranalyse -->
+<!-- <!-- Eingefügt, da Überschriften sonst verschluckt. --> -->
+<!-- $\,$ -->
+<!-- \vspace{-1cm} -->
+<!-- ```{r, eval=FALSE} -->
+<!-- set.seed(1896) -->
+<!-- # Numerische Variablen auswählen -->
+<!-- KidsFeetnumeric <- KidsFeet %>% -->
+<!--   select(length, width) -->
+<!-- ergkmeans <- kmeans(KidsFeetnumeric,  -->
+<!--                     centers = 2) # k=2 -->
+<!-- ergkmeans -->
+<!-- ``` -->
 
-### Clusteranalyse
-```{r, eval=FALSE}
-set.seed(1896)
-# Numerische Variablen auswählen
-KidsFeetnumeric <- KidsFeet %>%
-  select(length, width)
-ergkmeans <- kmeans(KidsFeetnumeric, 
-                    centers = 2) # k=2
-ergkmeans
-```
-
-```{r, echo=FALSE}
-set.seed(1896)
-KidsFeetnumeric <- KidsFeet %>%
-  select(length, width)
-ergkmeans <- kmeans(KidsFeetnumeric, centers = 2) # k=2
-gf_point(width ~ length, col = ergkmeans$cluster, 
-       data = KidsFeet)
-```
-
-### Datenhandling
-
-```{r, eval=FALSE}
-# Variablen selektieren
-KidsFeet.length <- KidsFeet %>%
-  select(length)
-# Beobachtungen auswählen
-KidsFeet.boys <- KidsFeet %>%
-  filter(sex == "B")
-# Variablen erzeugen
-KidsFeet.in <- KidsFeet %>%
-  mutate(length.in = 0.394*length)
-# Bedingungen
-KidsFeet.grouped <- KidsFeet %>%
-  mutate(length.grouped = case_when(
-    length > 25 ~ "large",
-    length <= 25 ~ "not large"))
-```
+<!-- ```{r, echo=FALSE} -->
+<!-- set.seed(1896) -->
+<!-- KidsFeetnumeric <- KidsFeet %>% -->
+<!--   select(length, width) -->
+<!-- ergkmeans <- kmeans(KidsFeetnumeric, centers = 2) # k=2 -->
+<!-- gf_point(width ~ length, col = ergkmeans$cluster,  -->
+<!--        data = KidsFeet) -->
+<!-- ``` -->
 
 
 ### Zeitreihenzerlegung^[Anderer Beispieldatensatz.]
+
 ```{r, eval=FALSE}
 library(forecast) # Paket forecast laden
 data(wineind)     # Interner Datensatz 
@@ -349,6 +344,27 @@ ergstl <- stl(wineind, s.window = 11)
 # Vorhersagen
 predstl <- predict(ergstl)
 plot(predstl)
+```
+
+
+### Datenhandling
+
+
+```{r, eval=FALSE}
+# Variablen selektieren
+KidsFeet.length <- KidsFeet %>%
+  select(length)
+# Beobachtungen auswählen
+KidsFeet.boys <- KidsFeet %>%
+  filter(sex == "B")
+# Variablen erzeugen
+KidsFeet.in <- KidsFeet %>%
+  mutate(length.in = 0.394*length)
+# Bedingungen
+KidsFeet.grouped <- KidsFeet %>%
+  mutate(length.grouped = case_when(
+    length > 25 ~ "large",
+    length <= 25 ~ "not large"))
 ```
 
 
