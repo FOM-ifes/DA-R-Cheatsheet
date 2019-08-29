@@ -57,7 +57,7 @@ library(mosaic)
 
 ## Daten
 
-### Einlesen
+Einlesen:
 ```{r eval=FALSE}
 getwd() # Aktuelles Arbeitsverzeichnis
 # csv Datensatz einlesen
@@ -67,8 +67,7 @@ library(readxl) # Paket zum xlsx Import
 Daten <- read_excel("Pfad/Datei") 
 ```
 
-### Datenhandling
-Paket `dplyr` (mit `mosaic` geladen)
+Datenhandling mit Paket `dplyr` (mit `mosaic` geladen):
 ```{r eval=FALSE}
 filter()    # Beobachtungen filtern
 select()    # Variablen wählen
@@ -79,16 +78,14 @@ case_when() # Fallunterscheidung
 %>%         # Übergabe von Ergebnissen
 ```
 
-### Logik
-
+Logik:
 ```{r, eval=FALSE}
 == ; != # Gleichheit bzw. Ungleichheit
 > ; >= ; <= ; < # größer bzw. kleiner (gleich)
 & ; | # und bzw. oder
 ```
 
-### Arithmetik
-
+Arithmetik:
 ```{r, eval=FALSE}
 + ; -  ; * ; : # Grundrechenarten
 ^ ; sqrt(x) # Potenz bzw. Quadratwurzel
@@ -99,7 +96,7 @@ abs(x) # Absolutbetrag
 
 ## Datenanalyse
 
-### Grafische Verfahren
+Grafische Verfahren:
 ```{r eval=FALSE}
 gf_bar()        # Säulendiagramm
 gf_histogram()  # Histogramm
@@ -108,7 +105,7 @@ gf_point()      # Streudiagrmm
 mosaicplot()    # Mosaikplot (nicht ggformula)
 ```
 
-### Kennzahlen
+Kennzahlen:
 ```{r eval=FALSE}
 inspect()  # Datenübersicht
 tally()    # Tabellierung, Häufigkeiten 
@@ -122,14 +119,14 @@ cor()      # Korrelationskoefizient
 
 ## Verteilungen, Simulation
 
-### Normalverteilung
+Normalverteilung:
 ```{r, eval=FALSE}
 xpnorm() # Verteilungsfunktion Normalverteilung
 xqnorm() # Quantilsfunktion Normalverteilung
 gf_qq() # QQ-Plot (allgemein)
 ```
 
-### Randomisierung, Simulationen
+Randomisierung, Simulationen:
 ```{r, eval=FALSE}
 set.seed() # Zufallszahlengenerator setzen
 rflip()    # Münzwurf
@@ -139,18 +136,8 @@ resample() # Stichprobe mit Zurücklegen
 shuffle()  # Permutation
 ```
 
-## Inferenz/ Modellierung
+## Modellierung
 
-### Testverfahren
-```{r eval=FALSE}
-prop.test()   # Binomialtest (approximativ)
-xchisq.test() # Chi-Quadrat Unabhängigkeitstest
-t.test()      # t-Test
-aov()         # Varianzanalyse
-```
-
-
-### Modellierung
 ```{r eval=FALSE}
 lm()                     # Lineare Regression
 glm(, family="binomial") # Logistische Regression
@@ -160,11 +147,20 @@ fitted()                 # Angepasste Werte
 predict()                # Vorhersagen
 ```
 
+## Inferenz
+
+```{r eval=FALSE}
+prop.test()   # Binomialtest (approximativ)
+xchisq.test() # Chi-Quadrat Unabhängigkeitstest
+t.test()      # t-Test
+aov()         # Varianzanalyse
+```
+
 \newpage
 
 ## Beispielanalyse
 
-### Vorbereitung
+Vorbereitung:
 
 ```{r, message=FALSE, results=FALSE, eval = c(1,2,4)}
 library(mosaic)   # mosaic laden
@@ -173,8 +169,8 @@ data(KidsFeet)    # Interner Datensatz
 inspect(KidsFeet) # Datenübersicht
 ```
 
+Eine kategoriale Variable:
 
-### Eine kategoriale Variable
 ```{r, eval=FALSE}
 gf_bar( ~ domhand, data = KidsFeet)
 tally( ~ domhand, data = KidsFeet)
@@ -182,21 +178,22 @@ prop( ~ domhand, success = "L", data = KidsFeet)
 ```
 
 
-### Eine metrische Variable
+Eine metrische Variable:
+
 ```{r, eval=FALSE}
 gf_histogram( ~ length, data = KidsFeet)
 favstats(~ length, data = KidsFeet)
 ```
 
 
-### Zwei kategoriale Variablen
+Zwei kategoriale Variablen:
 ```{r, eval=FALSE}
 mosaicplot(domhand ~ biggerfoot, data = KidsFeet)
 tally(biggerfoot ~ domhand, data = KidsFeet)
 xchisq.test(biggerfoot ~ domhand, data = KidsFeet)
 ```
 
-### Zwei numerische Variablen
+Zwei numerische Variablen:
 ```{r, eval=FALSE}
 gf_point(width ~ length, data = KidsFeet)
 cor(width ~ length, data = KidsFeet)
@@ -204,7 +201,7 @@ cor.test(width ~ length, data = KidsFeet)
 ```
 
 
-### Zwei Stichproben: kategorial
+Zwei Stichproben: kategorial:
 ```{r, eval=FALSE}
 gf_bar( ~ domhand | sex, data = KidsFeet)
 prop(domhand ~ sex, success = "L", 
@@ -214,7 +211,7 @@ prop.test(domhand ~ sex, success = "L",
 ``` 
 
 
-### Zwei Stichproben: numerisch
+Zwei Stichproben: numerisch:
 ```{r, eval=FALSE}
 gf_histogram( ~ length | sex, data = KidsFeet)
 gf_boxplot(length ~ sex, data = KidsFeet)
@@ -222,10 +219,10 @@ favstats(length ~ sex, data = KidsFeet)
 t.test(length ~ sex, data = KidsFeet)
 ```
 
-
-### Lineare Regression
+Lineare Regression:
 ```{r, eval=FALSE}
-erglm <- lm(width ~ length + sex, data = KidsFeet)
+erglm <- lm(width ~ length + sex, 
+            data = KidsFeet)
 plotModel(erglm)
 summary(erglm)
 ```
@@ -234,34 +231,7 @@ erglm <- lm(width ~ length + sex, data = KidsFeet)
 plotModel(erglm)
 ```
 
-### Bootstrap^[Datensatz hier eher zu klein für Bootstrap Perzentile]
-```{r, out.width="90%"}
-set.seed(1896) 
-Bootvtlg <- do(10000) * 
-  mean(~ length, data = resample(KidsFeet))
-gf_histogram( ~ mean, data = Bootvtlg)
-# Bootstrap Konfidenzintervall
-quantile( ~ mean, probs = c(0.025, 0.975), 
-          data = Bootvtlg)
-```
-
-
-### Permutationstest
-```{r, out.width="90%"}
-set.seed(1896)
-mdiff <- diffmean(length ~ sex, data = KidsFeet)
-Nullvtlg <- do(10000) *
-  diffmean(length ~ shuffle(sex), data = KidsFeet)
-gf_histogram( ~ diffmean, data = Nullvtlg) %>%
-  gf_vline(xintercept = mdiff)
-# Permutationstest p-Wert
-prop( ~ abs(diffmean)>=abs(mdiff), data = Nullvtlg)
-```
-
-
-\newpage
-
-### Logistische Regression
+Logistische Regression:
 ```{r, eval=FALSE}
 ergglm <- glm(sex ~ length, family = binomial,
               data = KidsFeet)
@@ -277,79 +247,7 @@ plotModel(ergglm)
 ```
 
 
-<!-- ### Hauptkomponentenanalyse (PCA) -->
-<!-- <!-- Eingefügt, da Überschriften sonst verschluckt. --> -->
-<!-- $\,$ -->
-<!-- ```{r, eval=FALSE} -->
-<!-- ergpca <- prcomp( ~ length + width,  -->
-<!--                   data = KidsFeet) -->
-<!-- plot(ergpca) # Screeplot -->
-<!-- summary(ergpca) -->
-<!-- biplot(ergpca) -->
-<!-- ``` -->
-
-<!-- ```{r, echo=FALSE, fig.align="center", out.extra = "trim = 30mm 5mm 30mm 10mm, clip"} -->
-<!-- ergpca <- prcomp( ~ length + width, -->
-<!--                   data = KidsFeet) -->
-<!-- biplot(ergpca, -->
-<!--        cex = 0.5, -->
-<!--        cex.axis = 0.5, -->
-<!--        cex.lab = 0.5) -->
-<!-- ``` -->
-
-<!-- ### Clusteranalyse -->
-<!-- <!-- Eingefügt, da Überschriften sonst verschluckt. --> -->
-<!-- $\,$ -->
-<!-- \vspace{-1cm} -->
-<!-- ```{r, eval=FALSE} -->
-<!-- set.seed(1896) -->
-<!-- # Numerische Variablen auswählen -->
-<!-- KidsFeetnumeric <- KidsFeet %>% -->
-<!--   select(length, width) -->
-<!-- ergkmeans <- kmeans(KidsFeetnumeric,  -->
-<!--                     centers = 2) # k=2 -->
-<!-- ergkmeans -->
-<!-- ``` -->
-
-<!-- ```{r, echo=FALSE} -->
-<!-- set.seed(1896) -->
-<!-- KidsFeetnumeric <- KidsFeet %>% -->
-<!--   select(length, width) -->
-<!-- ergkmeans <- kmeans(KidsFeetnumeric, centers = 2) # k=2 -->
-<!-- gf_point(width ~ length, col = ergkmeans$cluster,  -->
-<!--        data = KidsFeet) -->
-<!-- ``` -->
-
-
-### Zeitreihenzerlegung^[Anderer Beispieldatensatz.]
-
-```{r, eval=FALSE}
-library(forecast) # Paket forecast laden
-data(wineind)     # Interner Datensatz 
-?wineind          # Hilfe zum Datesatz
-plot(wineind)
-# Zerlegung
-ergstl <- stl(wineind, s.window = 11)
-plot(ergstl)
-# Vorhersagen
-predstl <- predict(ergstl)
-plot(predstl)
-```
-
-```{r, echo=FALSE}
-library(forecast) # Paket laden
-data(wineind)     # Interner Datensatz 
-# Zerlegung
-ergstl <- stl(wineind, s.window = 11)
-# Vorhersagen
-predstl <- predict(ergstl)
-plot(predstl)
-```
-
-
-### Datenhandling
-
-
+Datenhandling:
 ```{r, eval=FALSE}
 # Variablen selektieren
 KidsFeet.length <- KidsFeet %>%
@@ -366,6 +264,39 @@ KidsFeet.grouped <- KidsFeet %>%
     length > 25 ~ "large",
     length <= 25 ~ "not large"))
 ```
+
+\newpage
+
+Bootstrap:^[Datensatz hier eher zu klein für Bootstrap Perzentile]
+```{r, out.width="90%"}
+set.seed(1896)
+# Simuliere Ziehen zufälliger Stichprobe
+Bootvtlg <- do(10000) * 
+  mean(~ length, data = resample(KidsFeet))
+# Bootstrap-Verteilung
+gf_histogram( ~ mean, data = Bootvtlg)
+# Bootstrap Konfidenzintervall
+confint(Bootvtlg)
+```
+
+Permutationstest:
+```{r, out.width="90%"}
+set.seed(1896)
+# Beobachtete Differenz
+est.diff <- diffmean(length ~ sex, 
+                     data = KidsFeet)
+# Simuliere zufällige Zuordnung:
+Nullvtlg <- do(10000) *
+  diffmean(length ~ shuffle(sex), 
+           data = KidsFeet)
+# Verteilung unter H_0
+gf_histogram( ~ diffmean, data = Nullvtlg) %>%
+  gf_vline(xintercept =~ est.diff)
+# Permutationstest p-Wert
+prop( ~ abs(diffmean) >= abs(est.diff), 
+      data = Nullvtlg)
+```
+
 
 
 ---
