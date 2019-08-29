@@ -49,7 +49,7 @@ d.h., modelliere `y` in Abhängigkeit von `x` getrennt bzw. bedingt für `z` aus
 Zusatzpakete müssen vor der ersten Benutzung einmalig installiert und geladen werden:
 ```{r, eval=FALSE}
 # Einmalig installieren
-install.packages("mosaic")
+install.packages("mosaic", type = "binary")
 # Laden, einmalig in jeder Sitzung
 library(mosaic) 
 ```
