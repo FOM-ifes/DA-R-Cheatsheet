@@ -32,6 +32,7 @@ knitr::opts_chunk$set(
   warning = FALSE)   # Warnungen überdrücken!
 ```
 
+
 ## Vorbemerkungen
 
 * R unterscheidet zwischen Groß- und Kleinbuchstaben
@@ -40,13 +41,19 @@ knitr::opts_chunk$set(
 * Eine Ergebniszuweisung erfolgt über `<-`
 * Hilfe zur Funktion `foo`: `?foo` 
 
-Innerhalb von [`mosaic`](https://cran.r-project.org/package=mosaic):
+
+Innerhalb von [`mosaic`](https://cran.r-project.org/package=mosaic): 
+
+
 ```{r eval=FALSE} 
 analysiere(y ~ x | z , data = Daten)
 ```
+
 d.h., modelliere `y` in Abhängigkeit von `x` getrennt bzw. bedingt für `z` aus dem Datensatz `Daten`.^[Beim Mac ist `~` die Tastenkombination `alt`+`n`, `|` die Tastenkombination `alt`+`7`] 
 
+
 Zusatzpakete müssen vor der ersten Benutzung einmalig installiert und geladen werden:
+\newline
 ```{r, eval=FALSE}
 # Einmalig installieren
 install.packages("mosaic", type = "binary")
@@ -55,7 +62,7 @@ library(mosaic)
 ```
 
 
-## Daten
+## Daten 
 
 Einlesen:
 ```{r eval=FALSE}
@@ -65,36 +72,39 @@ Daten <- read.csv2("Pfad/Datei")
 # xlsx Datensatz einlesen
 library(readxl) # Paket zum xlsx Import
 Daten <- read_excel("Pfad/Datei") 
-```
+``` 
+
+\columnbreak
 
 Datenhandling mit Paket `dplyr` (mit `mosaic` geladen):
 ```{r eval=FALSE}
-filter()    # Beobachtungen filtern
-select()    # Variablen wählen
-mutate()    # Variablen verändern/ erzeugen
-summarise() # Beobachtungen zusammmenfassen
-group_by()  # Beobachtungen gruppieren
-case_when() # Fallunterscheidung
-%>%         # Übergabe von Ergebnissen
+filter()        # Beobachtungen filtern
+select()        # Variablen wählen
+mutate()        # Variablen verändern/ erzeugen
+summarise()     # Beobachtungen zusammmenfassen
+group_by()      # Beobachtungen gruppieren
+case_when()     # Fallunterscheidung
+%>%             # Übergabe von Ergebnissen
 ```
 
 Logik:
 ```{r, eval=FALSE}
-== ; != # Gleichheit bzw. Ungleichheit
+== ; !=         # Gleichheit bzw. Ungleichheit
 > ; >= ; <= ; < # größer bzw. kleiner (gleich)
-& ; | # und bzw. oder
+& ; |           # und bzw. oder
 ```
 
 Arithmetik:
 ```{r, eval=FALSE}
-+ ; -  ; * ; : # Grundrechenarten
-^ ; sqrt(x) # Potenz bzw. Quadratwurzel
++ ; -  ; * ; :  # Grundrechenarten
+^ ; sqrt(x)     # Potenz bzw. Quadratwurzel
 exp(x) ; log(x) # e^x bzw. ln(x)
-abs(x) # Absolutbetrag
+abs(x)          # Absolutbetrag
 
 ```
 
-## Datenanalyse
+
+## Datenanalyse 
 
 Grafische Verfahren:
 ```{r eval=FALSE}
@@ -107,34 +117,37 @@ mosaicplot()    # Mosaikplot (nicht ggformula)
 
 Kennzahlen:
 ```{r eval=FALSE}
-inspect()  # Datenübersicht
-tally()    # Tabellierung, Häufigkeiten 
-prop()     # Anteile
-diffprop() # Differenz zweier Anteile
-favstats() # Kennzahlübersicht
-mean()     # Arithmetischer Mittelwert
-diffmean() # Differenz zweier Mittelwerte
-cor()      # Korrelationskoefizient
+inspect()       # Datenübersicht
+tally()         # Tabellierung, Häufigkeiten 
+prop()          # Anteile
+diffprop()      # Differenz zweier Anteile
+favstats()      # Kennzahlübersicht
+mean()          # Arithmetischer Mittelwert
+diffmean()      # Differenz zweier Mittelwerte
+cor()           # Korrelationskoefizient
 ```
+
+\columnbreak
 
 ## Verteilungen, Simulation
 
 Normalverteilung:
 ```{r, eval=FALSE}
-xpnorm() # Verteilungsfunktion Normalverteilung
-xqnorm() # Quantilsfunktion Normalverteilung
-gf_qq() # QQ-Plot (allgemein)
+xpnorm()  # Verteilungsfunktion Normalverteilung
+xqnorm()  # Quantilsfunktion Normalverteilung
+gf_qq()   # QQ-Plot (allgemein)
 ```
 
 Randomisierung, Simulationen:
 ```{r, eval=FALSE}
-set.seed() # Zufallszahlengenerator setzen
-rflip()    # Münzwurf
-do() *     # Wiederholung (Schleife)
-sample()   # Stichprobe ohne Zurücklegen
-resample() # Stichprobe mit Zurücklegen
-shuffle()  # Permutation
+set.seed()    # Zufallszahlengenerator setzen
+rflip()       # Münzwurf
+do() *        # Wiederholung (Schleife)
+sample()      # Stichprobe ohne Zurücklegen
+resample()    # Stichprobe mit Zurücklegen
+shuffle()     # Permutation
 ```
+
 
 ## Modellierung
 
@@ -146,6 +159,7 @@ residuals()              # Residuen
 fitted()                 # Angepasste Werte 
 predict()                # Vorhersagen
 ```
+
 
 ## Inferenz
 
@@ -161,16 +175,15 @@ aov()         # Varianzanalyse
 ## Beispielanalyse
 
 Vorbereitung:
-
 ```{r, message=FALSE, results=FALSE, eval = c(1,2,4)}
-library(mosaic)   # mosaic laden
-data(KidsFeet)    # Interner Datensatz
+library(mosaic)     # mosaic laden
+data(KidsFeet)      # Interner Datensatz
 ?KidsFeet         # Hilfe zum Datensatz
-inspect(KidsFeet) # Datenübersicht
+inspect(KidsFeet)   # Datenübersicht
 ```
 
-Eine kategoriale Variable:
 
+Eine kategoriale Variable:
 ```{r, eval=FALSE}
 gf_bar( ~ domhand, data = KidsFeet)
 tally( ~ domhand, data = KidsFeet)
@@ -179,7 +192,6 @@ prop( ~ domhand, success = "L", data = KidsFeet)
 
 
 Eine metrische Variable:
-
 ```{r, eval=FALSE}
 gf_histogram( ~ length, data = KidsFeet)
 favstats(~ length, data = KidsFeet)
@@ -192,6 +204,7 @@ mosaicplot(domhand ~ biggerfoot, data = KidsFeet)
 tally(biggerfoot ~ domhand, data = KidsFeet)
 xchisq.test(biggerfoot ~ domhand, data = KidsFeet)
 ```
+
 
 Zwei numerische Variablen:
 ```{r, eval=FALSE}
@@ -219,6 +232,8 @@ favstats(length ~ sex, data = KidsFeet)
 t.test(length ~ sex, data = KidsFeet)
 ```
 
+\columnbreak
+
 Lineare Regression:
 ```{r, eval=FALSE}
 erglm <- lm(width ~ length + sex, 
@@ -230,6 +245,7 @@ summary(erglm)
 erglm <- lm(width ~ length + sex, data = KidsFeet)
 plotModel(erglm)
 ```
+
 
 Logistische Regression:
 ```{r, eval=FALSE}
@@ -246,6 +262,7 @@ ergglm <- glm(sex ~ length, family = binomial,
 plotModel(ergglm)
 ```
 
+\columnbreak
 
 Datenhandling:
 ```{r, eval=FALSE}
@@ -278,6 +295,8 @@ gf_histogram( ~ mean, data = Bootvtlg)
 # Bootstrap Konfidenzintervall
 confint(Bootvtlg)
 ```
+
+\columnbreak
 
 Permutationstest:
 ```{r, out.width="90%"}
