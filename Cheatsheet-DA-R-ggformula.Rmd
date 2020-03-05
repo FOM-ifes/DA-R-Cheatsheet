@@ -34,7 +34,7 @@ knitr::opts_chunk$set(
 
 
 ## Vorbemerkungen
-
+ 
 * R unterscheidet zwischen Groß- und Kleinbuchstaben
 * R verwendet den Punkt `.` als Dezimaltrennzeichen
 * Fehlende Werte werden in R durch `NA` kodiert
@@ -175,10 +175,10 @@ aov()         # Varianzanalyse
 ## Beispielanalyse
 
 Vorbereitung:
-```{r, message=FALSE, results=FALSE, eval = c(1,2,4)}
+```{r, message=FALSE, results=FALSE}
 library(mosaic)     # mosaic laden
 data(KidsFeet)      # Interner Datensatz
-?KidsFeet         # Hilfe zum Datensatz
+?KidsFeet           # Hilfe zum Datensatz
 inspect(KidsFeet)   # Datenübersicht
 ```
 
