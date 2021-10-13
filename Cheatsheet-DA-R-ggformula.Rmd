@@ -49,7 +49,7 @@ Innerhalb von [`mosaic`](https://cran.r-project.org/package=mosaic):
 analysiere(y ~ x | z , data = Daten)
 ```
 
-d.h., modelliere `y` in Abhängigkeit von `x` getrennt bzw. bedingt für `z` aus dem Datensatz `Daten`.^[Beim Mac ist `~` die Tastenkombination `alt`+`n`, `|` die Tastenkombination `alt`+`7`] 
+d.h., modelliere `y` in Abhängigkeit von `x` getrennt bzw. bedingt für `z` aus der Datentabelle `Daten`.^[Beim Mac ist `~` die Tastenkombination `option`+`n`, `|` die Tastenkombination `option`+`7`] 
 
 
 Zusatzpakete müssen vor der ersten Benutzung einmalig installiert und geladen werden:
@@ -67,9 +67,9 @@ library(mosaic)
 Einlesen:
 ```{r eval=FALSE}
 getwd() # Aktuelles Arbeitsverzeichnis
-# csv Datensatz einlesen
+# csv Datentabelle einlesen
 Daten <- read.csv2("Pfad/Datei") 
-# xlsx Datensatz einlesen
+# xlsx Datentabelle einlesen
 library(readxl) # Paket zum xlsx Import
 Daten <- read_excel("Pfad/Datei") 
 ``` 
@@ -117,7 +117,6 @@ mosaicplot()    # Mosaikplot (nicht ggformula)
 
 Kennzahlen:
 ```{r eval=FALSE}
-inspect()       # Datenübersicht
 tally()         # Tabellierung, Häufigkeiten 
 prop()          # Anteile
 diffprop()      # Differenz zweier Anteile
@@ -125,6 +124,8 @@ favstats()      # Kennzahlübersicht
 mean()          # Arithmetischer Mittelwert
 diffmean()      # Differenz zweier Mittelwerte
 cor()           # Korrelationskoefizient
+pdata()         # Empirische Verteilungsfunktion
+qdata()         # Quantilsfunktion
 ```
 
 \columnbreak
@@ -165,7 +166,7 @@ predict()                # Vorhersagen
 
 ```{r eval=FALSE}
 prop.test()   # Binomialtest (approximativ)
-xchisq.test() # Chi-Quadrat Unabhängigkeitstest
+xchisq.test() # Chi-Quadrat Test
 t.test()      # t-Test
 aov()         # Varianzanalyse
 ```
@@ -177,9 +178,9 @@ aov()         # Varianzanalyse
 Vorbereitung:
 ```{r, message=FALSE, results=FALSE}
 library(mosaic)     # mosaic laden
-data(KidsFeet)      # Interner Datensatz
-?KidsFeet           # Hilfe zum Datensatz
-inspect(KidsFeet)   # Datenübersicht
+data(KidsFeet)      # Interne Datentabelle laden
+str(KidsFeet)       # Struktur der Datentabelle
+?(KidsFeet)         # Hilfe, Info zur Datentabelle
 ```
 
 
@@ -206,7 +207,7 @@ xchisq.test(biggerfoot ~ domhand, data = KidsFeet)
 ```
 
 
-Zwei numerische Variablen:
+Zwei metrische Variablen:
 ```{r, eval=FALSE}
 gf_point(width ~ length, data = KidsFeet)
 cor(width ~ length, data = KidsFeet)
@@ -214,7 +215,7 @@ cor.test(width ~ length, data = KidsFeet)
 ```
 
 
-Zwei Stichproben: kategorial:
+Zwei Stichproben, kategorial:
 ```{r, eval=FALSE}
 gf_bar( ~ domhand | sex, data = KidsFeet)
 prop(domhand ~ sex, success = "L", 
@@ -224,7 +225,7 @@ prop.test(domhand ~ sex, success = "L",
 ``` 
 
 
-Zwei Stichproben: numerisch:
+Zwei Stichproben, metrisch:
 ```{r, eval=FALSE}
 gf_histogram( ~ length | sex, data = KidsFeet)
 gf_boxplot(length ~ sex, data = KidsFeet)
@@ -284,7 +285,7 @@ KidsFeet.grouped <- KidsFeet %>%
 
 \newpage
 
-Bootstrap:^[Datensatz hier eher zu klein für Bootstrap Perzentile]
+Bootstrap:^[Datentabelle hier sehr klein für Bootstrap Perzentile]
 ```{r, out.width="90%"}
 set.seed(1896)
 # Simuliere Ziehen zufälliger Stichprobe
@@ -292,8 +293,11 @@ Bootvtlg <- do(10000) *
   mean(~ length, data = resample(KidsFeet))
 # Bootstrap-Verteilung
 gf_histogram( ~ mean, data = Bootvtlg)
+# Standardfehler
+sd( ~ mean, data = Bootvtlg)
 # Bootstrap Konfidenzintervall
-confint(Bootvtlg)
+qdata( ~ mean, p = c(0.025, 0.975), 
+       data = Bootvtlg)
 ```
 
 \columnbreak
@@ -310,15 +314,13 @@ Nullvtlg <- do(10000) *
            data = KidsFeet)
 # Verteilung unter H_0
 gf_histogram( ~ diffmean, data = Nullvtlg) %>%
-  gf_vline(xintercept =~ est.diff)
+  gf_vline(xintercept = ~ est.diff)
 # Permutationstest p-Wert
 prop( ~ abs(diffmean) >= abs(est.diff), 
       data = Nullvtlg)
 ```
 
-
-
----
+\columnbreak
 
 * Lizenz [Creative Commons Attribution-ShareAlike 3.0 Unported](http://creativecommons.org/licenses/by-sa/3.0). 
 * R Version: `r getRversion()`
