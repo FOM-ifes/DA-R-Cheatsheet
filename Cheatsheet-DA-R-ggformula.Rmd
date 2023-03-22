@@ -1,8 +1,6 @@
 ---
 title: |
-    | Datenanalyse mit R mosaic  
-    | und ggformula
-    
+    | Datenanalyse mit R mosaic
 author: "Karsten Lübke"
 date: "`r Sys.Date()`"
 output: 
@@ -96,7 +94,7 @@ Logik:
 
 Arithmetik:
 ```{r, eval=FALSE}
-+ ; -  ; * ; :  # Grundrechenarten
++ ; -  ; * ; /  # Grundrechenarten
 ^ ; sqrt(x)     # Potenz bzw. Quadratwurzel
 exp(x) ; log(x) # e^x bzw. ln(x)
 abs(x)          # Absolutbetrag
@@ -117,11 +115,13 @@ mosaicplot()    # Mosaikplot (nicht ggformula)
 
 Kennzahlen:
 ```{r eval=FALSE}
-tally()         # Tabellierung, Häufigkeiten 
+tally()         # Tabellierung, Häufigkeiten
 prop()          # Anteile
+count()         # Anzahl
 diffprop()      # Differenz zweier Anteile
 favstats()      # Kennzahlübersicht
 mean()          # Arithmetischer Mittelwert
+sum()           # Summe
 diffmean()      # Differenz zweier Mittelwerte
 cor()           # Korrelationskoefizient
 pdata()         # Empirische Verteilungsfunktion
