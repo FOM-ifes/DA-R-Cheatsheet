@@ -74,15 +74,13 @@ Daten <- read_excel("Pfad/Datei")
 
 \columnbreak
 
-Datenhandling mit Paket `dplyr` (mit `mosaic` geladen):
+Datenhandling:
 ```{r eval=FALSE}
 filter()        # Beobachtungen filtern
 select()        # Variablen wählen
 mutate()        # Variablen verändern/ erzeugen
-summarise()     # Beobachtungen zusammmenfassen
-group_by()      # Beobachtungen gruppieren
 case_when()     # Fallunterscheidung
-%>%             # Übergabe von Ergebnissen
+%>% ; |>        # Übergabe von Ergebnissen
 ```
 
 Logik:
@@ -98,9 +96,7 @@ Arithmetik:
 ^ ; sqrt(x)     # Potenz bzw. Quadratwurzel
 exp(x) ; log(x) # e^x bzw. ln(x)
 abs(x)          # Absolutbetrag
-
 ```
-
 
 ## Datenanalyse 
 
@@ -120,7 +116,6 @@ prop()          # Anteile
 count()         # Anzahl
 diffprop()      # Differenz zweier Anteile
 favstats()      # Kennzahlübersicht
-mean()          # Arithmetischer Mittelwert
 sum()           # Summe
 diffmean()      # Differenz zweier Mittelwerte
 cor()           # Korrelationskoefizient
@@ -128,7 +123,6 @@ pdata()         # Empirische Verteilungsfunktion
 qdata()         # Quantilsfunktion
 ```
 
-\columnbreak
 
 ## Verteilungen, Simulation
 
