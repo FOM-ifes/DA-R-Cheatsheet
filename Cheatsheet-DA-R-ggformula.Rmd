@@ -37,6 +37,7 @@ knitr::opts_chunk$set(
 * R verwendet den Punkt `.` als Dezimaltrennzeichen
 * Fehlende Werte werden in R durch `NA` kodiert
 * Eine Ergebniszuweisung erfolgt über `<-`
+* Übergabe `|>`
 * Hilfe zur Funktion `foo`: `?foo` 
 
 
@@ -149,7 +150,6 @@ shuffle()     # Permutation
 ```{r eval=FALSE}
 lm()                     # Lineare Regression
 glm(, family="binomial") # Logistische Regression
-plotModel()              # Modell zeichnen
 residuals()              # Residuen 
 fitted()                 # Angepasste Werte 
 predict()                # Vorhersagen
