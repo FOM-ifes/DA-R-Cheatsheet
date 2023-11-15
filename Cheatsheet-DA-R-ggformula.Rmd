@@ -149,10 +149,13 @@ shuffle()     # Permutation
 
 ```{r eval=FALSE}
 lm()                     # Lineare Regression
-glm(, family="binomial") # Logistische Regression
+coef()                   # Koeffizienten
+rsquared()               # R-Quadrat
+summary()                # Zusammenfassung
 residuals()              # Residuen 
 fitted()                 # Angepasste Werte 
 predict()                # Vorhersagen
+glm(, family="binomial") # Logistische Regression
 ```
 
 
